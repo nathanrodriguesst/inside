@@ -1,0 +1,12 @@
+# ninja log v5
+0	25	1711307934357436610	build.ninja	4c27fa2b4a6e2865
+1	279	1711303774117726604	CMakeFiles/inside.dir/src/scans/nmap.cpp.o	21f980c6784a1f01
+1	2037	1711306529645018091	CMakeFiles/inside.dir/main.cpp.o	5cd645b6fd0fd91f
+2037	2102	1711306529713019855	inside	1d74f03a71cbc6f7
+1	339	1711303774177728135	CMakeFiles/inside.dir/src/scans/exec.cpp.o	60ff06f2cb4f40b5
+1	214	1711307946017738897	CMakeFiles/inside.dir/src/scans/nmap.cpp.o	21f980c6784a1f01
+1	265	1711307946069740246	CMakeFiles/inside.dir/src/scans/exec.cpp.o	60ff06f2cb4f40b5
+0	1838	1711307947637780897	CMakeFiles/inside.dir/main.cpp.o	5cd645b6fd0fd91f
+1838	1911	1711307947713782867	inside	1d74f03a71cbc6f7
+0	202	1711308061120722888	CMakeFiles/inside.dir/src/scans/nmap.cpp.o	21f980c6784a1f01
+202	279	1711308061196724859	inside	1d74f03a71cbc6f7
