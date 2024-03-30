@@ -13,8 +13,8 @@ add_subdirectory(vendor/json)
 
 add_executable(inside main.cpp
         src/scans/exec.cpp
-        src/scans/nmap.cpp
+        src/scans/scan.cpp
         include/exec.h
-        include/nmap.h)
+        include/scan.h)
 
 target_link_libraries(inside PRIVATE nlohmann_json::nlohmann_json)

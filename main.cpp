@@ -1,13 +1,43 @@
 #include <iostream>
-#include "include/nmap.h"
+#include "include/scan.h"
 #include <nlohmann/json.hpp>
 #include <netinet/in.h>
 #include <sys/socket.h>
 
+std::string redirect(const char *) {
+    try {
+        // Attempt to parse JSON
+        std::cout << "Parsing JSON...\n";
+        nlohmann::json socketData = nlohmann::json::parse(buffer);
+
+        if (socketData.is_object()) {
+            std::string action = socketData["action"];
+            if (action == "nmap-scan") {
+                std::cout << "Initializing nmap scan...\n";
+                // Extract IP and args from JSON
+                std::string ip = socketData["ip"];
+                std::string args = socketData["args"];
+
+                return nmapScan(ip, args);
+
+            } else if (action == "feroxbuster-scan") {
+                std::cout << "Initializing feroxbuster scan...\n";
+                std::string url = socketData["url"];
+                std::string args = socketData["args"];
+
+                std::cout << "ferox";
+                return feroxbusterScan(url, args);
+            }
+        }
+    } catch (const std::exception& e) {
+        return "json error";
+    }
+    return "";
+}
+
 int main()
 {
     int serverSocket = socket(AF_INET, SOCK_STREAM, 0);
-
     sockaddr_in serverAddress;
     serverAddress.sin_family = AF_INET;
     serverAddress.sin_port = htons(27908);
@@ -23,31 +53,17 @@ int main()
         int clientSocket = accept(serverSocket, nullptr, nullptr);
 
         char buffer[1024] = { 0 };
+        //receive client socket data
         recv(clientSocket, buffer, sizeof(buffer), 0);
 
+        //read the json and redirect based on 'type' parameter
+        std::string output = redirect(buffer);
+
         try {
-            // Attempt to parse JSON
-            std::cout << "parsing JSON...\n";
-            nlohmann::json socketData = nlohmann::json::parse(buffer);
-
-            if (socketData.is_object()) {
-                std::string action = socketData["action"];
-                if (action == "nmap-scan") {
-                    std::cout << "nmap selected, initializing scan...\n";
-                    // Extract IP and args from JSON
-                    std::string ip = socketData["ip"];
-                    std::string args = socketData["args"];
-
-                    std::string output = nmapScan(ip, args);
-
-                    send(clientSocket, output.c_str(), output.length(), 0);
-                }
-            } else {
-                std::cout << "error";
-                return -1;
-            }
+            send(clientSocket, output.c_str(), output.length(), 0);
         } catch (const std::exception& e) {
-            std::cout << "error";
+            std::cout << "error sending data.";
+            return 1;
         }
     }
 }
