@@ -7,7 +7,5 @@ std::string nmapScan(const std::string& ip, const std::string& args) {
   std::string cmd = scan + args + " " + ip;
   std::string result = exec(cmd.c_str());
 
-  std::cout << result;
-
   return result;
 }
