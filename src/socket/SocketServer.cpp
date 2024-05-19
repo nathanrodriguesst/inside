@@ -1,9 +1,8 @@
 #include <iostream>
-#include <nlohmann/json.hpp>
 #include <netinet/in.h>
 #include <sys/socket.h>
-#include "../../include/Scan.h"
 #include "../include/SocketServer.h"
+#include "RedirectHub.h"
 
 SocketServer::SocketServer(int port) : port(port) {}
 
@@ -11,7 +10,7 @@ void SocketServer::connect() const {
     int serverSocket = socket(AF_INET, SOCK_STREAM, 0);
 
     if (serverSocket == -1) {
-        std::cerr << "Error connecting socket";
+        std::cerr << "Error connecting to socket";
         return;
     }
 
@@ -22,7 +21,7 @@ void SocketServer::connect() const {
 
     if (bind(serverSocket, (struct sockaddr*)&serverAddress,
              sizeof(serverAddress)) < 0) {
-        std::cerr << "Binding failed";
+        std::cerr << "Socket binding failed, port " << port << " may still be in use.";
         return;
     }
 
@@ -37,44 +36,13 @@ void SocketServer::connect() const {
         recv(clientSocket, buffer, sizeof(buffer), 0);
 
         //read the json and redirect based on 'type' parameter
-        std::string output = redirect(buffer);
+        std::string output = RedirectHub::redirect(buffer);
 
         try {
             send(clientSocket, output.c_str(), output.length(), 0);
         } catch (const std::exception& e) {
-            std::cout << "error sending data.";
+            std::cout << "Error sending data.";
             return;
         }
     }
-}
-
-std::string SocketServer::redirect(const char *buffer) {
-    try {
-        // Attempt to parse JSON
-        std::cout << "Parsing JSON...\n";
-        nlohmann::json socketData = nlohmann::json::parse(buffer);
-
-        if (socketData.is_object()) {
-            std::string action = socketData["action"];
-            if (action == "nmap-scan") {
-                std::cout << "Initializing nmap scan...\n";
-                // Extract IP and args from JSON
-                std::string ip = socketData["ip"];
-                std::string args = socketData["args"];
-
-                return Scan::prepareNmapScan(ip, args);
-
-            } else if (action == "feroxbuster-scan") {
-                std::cout << "Initializing feroxbuster scan...\n";
-                std::string url = socketData["url"];
-                std::string args = socketData["args"];
-
-                std::cout << "ferox";
-                return Scan::PrepareDirectoryBruteForce(url, args);
-            }
-        }
-    } catch (const std::exception& e) {
-        return "json error";
-    }
-    return "";
 }

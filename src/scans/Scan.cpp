@@ -1,12 +1,9 @@
-//
-// Created by myazuk on 4/28/24.
-//
+#include <iostream>
+#include <memory>
+#include <cstdio>
+#include <array>
+#include <string>
 #include "../../include/Scan.h"
-#include<iostream>
-#include<memory>
-#include<cstdio>
-#include<array>
-#include<string>
 
 Scan::Scan() = default;
 
@@ -36,12 +33,10 @@ std::string Scan::prepareNmapScan(const std::string &ip, const std::string &args
 std::string Scan::PrepareDirectoryBruteForce(const std::string &target, const std::string &args) {
     std::string feroxBinPath = "../resources/feroxbuster ";
     std::string targetCmd = " --url http://" + target + " ";
-    //std::string wordListPath = " --wordlist ../resources/wordlists/directory-list-2.3-small.txt";
+    std::string wordListPath = " --wordlist ../resources/wordlists/directory-list-2.3-small.txt";
     std::string cmd = feroxBinPath + targetCmd;
 
     std::string result = execute(cmd.c_str());
 
     return result;
 }
-
-

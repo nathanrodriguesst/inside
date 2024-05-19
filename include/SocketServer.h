@@ -9,7 +9,6 @@ public:
 
 private:
     int port;
-    static std::string redirect(const char *buffer);
 };
 
 #endif //SOCKETSERVER_H
