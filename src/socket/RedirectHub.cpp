@@ -1,7 +1,6 @@
 #include <iostream>
 #include <nlohmann/json.hpp>
 #include <vector>
-#include <tuple>
 #include <string>
 #include "RedirectHub.h"
 #include "../../include/Scan.h"
@@ -36,35 +35,25 @@ std::string RedirectHub::redirect(const char *buffer) {
                 std::string args = "-sV -Pn";
 
                 std::string scanResult = Scan::prepareNmapScan(ip, args);
+
                 if (scanResult.empty()) {
-                    return "No results for open ports";
+                    std::cerr << "Unkown error running nmap.";
+                    return "No results for open ports.";
                 }
 
                 std::vector<ScanResult> parsedScanVector = ScanParser::parseScanResult(scanResult);
 
                 //move to mapping class
+                std::string concatenatedResult;
                 for (const auto &result:parsedScanVector) {
                     const std::string resultScanPort = result.port;
                     const std::string resultScanProtocol = result.protocol;
                     const std::string resultScanStatus = result.status;
                     const std::string resultScanService = result.service;
                     const std::string resultScanVersion = result.version;
-
-
-                    std::string concatenatedResult;
-                    concatenatedResult.append(" port:")
-                            .append(resultScanPort)
-                            .append(" protocol:")
-                            .append(resultScanProtocol)
-                            .append("status")
-                            .append(resultScanStatus)
-                            .append(" service:")
-                            .append(resultScanService)
-                            .append(" version:")
-                            .append(resultScanVersion);
-
-                    return concatenatedResult;
                 }
+
+                return concatenatedResult;
             }
         }
     } catch (const std::exception& e) {

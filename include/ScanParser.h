@@ -3,7 +3,6 @@
 
 #include <string>
 #include <vector>
-#include <tuple>
 
 struct ScanResult {
     std::string port;
