@@ -13,16 +13,19 @@ add_subdirectory(vendor/json)
 
 add_executable(inside
         src/main.cpp
-        src/socket/SocketServer.cpp
+        src/socket/RestfullServer.cpp
         src/scans/Scan.cpp
         src/exploits/Exploit.cpp
-        include/Exploit.h
+        include/exploit/Exploit.h
         src/scans/ScanParser.cpp
-        include/ScanParser.h
-        src/analysis/Analysis.cpp
-        include/Analysis.h
-        src/socket/RedirectHub.cpp
-        include/RedirectHub.h
+        include/scan/ScanParser.h
+        src/socket/Routes.cpp
+        include/socket/Routes.h
+        src/mapping/VulnerabilityMapping.cpp
+        include/mapping/VulnerabilityMapping.h
+        vendor/http/httplib.h
+        src/utils/TrimUtils.cpp
+        include/utils/TrimUtils.h
 )
 
 target_link_libraries(inside PRIVATE nlohmann_json::nlohmann_json)

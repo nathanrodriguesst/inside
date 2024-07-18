@@ -1,6 +1,7 @@
 #ifndef INSIDE_SCANPARSER_H
 #define INSIDE_SCANPARSER_H
 
+#include <set>
 #include <string>
 #include <vector>
 
@@ -15,7 +16,7 @@ struct ScanResult {
 class ScanParser {
 public:
     explicit ScanParser();
-    static std::vector<ScanResult> parseScanResult(std::string &scanResult);
+    static std::vector<ScanResult> parseScanResult(std::string &scanResult);\
 };
 
 #endif //INSIDE_SCANPARSER_H

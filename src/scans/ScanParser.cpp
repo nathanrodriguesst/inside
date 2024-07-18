@@ -1,20 +1,24 @@
-#include "../../include/ScanParser.h"
+#include "../../include/scan/ScanParser.h"
 #include <regex>
 #include <vector>
+#include "utils/TrimUtils.h"
 
 ScanParser::ScanParser() = default;
 
 std::vector<ScanResult> ScanParser::parseScanResult(std::string &scanResult) {
-    std::regex portProtocolServiceVersionRegex((R"((\d+)(?:\/(tcp|udp|icmp))(\s+open\s+)(\S+)(\s+.*))"));
+    std::regex mappingRegex((R"((\d+)(?:\/(tcp|udp|icmp))(\s+open\s+)(\S+)(\s+.*))"));
     std::smatch match;
     std::vector<ScanResult> resultsVector;
 
-    for (auto it = std::sregex_iterator(scanResult.begin(),scanResult.end(),portProtocolServiceVersionRegex);
-            it != std::sregex_iterator();
-            ++it) {
-        resultsVector.emplace_back(ScanResult{(*it)[1].str(), (*it)[2].str(),
-                                              (*it)[3].str(),(*it)[4].str(),
-                                              (*it)[5].str()});
+    for (auto it = std::sregex_iterator(scanResult.begin(),scanResult.end(), mappingRegex); it != std::sregex_iterator(); ++it) {
+        resultsVector.emplace_back(
+            ScanResult{ TrimUtils::trim((*it)[1].str()),
+                TrimUtils::trim((*it)[2].str()),
+                TrimUtils::trim((*it)[3].str()),
+                TrimUtils::trim((*it)[4].str()),
+                TrimUtils::trim((*it)[5].str())
+            }
+        );
     }
 
     return resultsVector;

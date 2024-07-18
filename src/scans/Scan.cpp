@@ -3,7 +3,7 @@
 #include <cstdio>
 #include <array>
 #include <string>
-#include "../../include/Scan.h"
+#include "../../include/scan/Scan.h"
 
 Scan::Scan() = default;
 
@@ -24,7 +24,8 @@ std::string Scan::execute(const char* cmd) {
 
 std::string Scan::prepareNmapScan(const std::string &ip, const std::string &args) {
     std::string scan = "nmap ";
-    std::string cmd = scan + args + " " + ip;
+    std::string cmd = scan.append(args).append(" ").append(ip);
+
     std::string result = execute(cmd.c_str());
 
     return result;
@@ -34,7 +35,7 @@ std::string Scan::PrepareDirectoryBruteForce(const std::string &target, const st
     std::string feroxBinPath = "../resources/feroxbuster ";
     std::string targetCmd = " --url http://" + target + " ";
     std::string wordListPath = " --wordlist ../resources/wordlists/directory-list-2.3-small.txt";
-    std::string cmd = feroxBinPath + targetCmd;
+    std::string cmd = feroxBinPath.append(targetCmd);
 
     std::string result = execute(cmd.c_str());
 

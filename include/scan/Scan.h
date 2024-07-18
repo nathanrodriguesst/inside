@@ -13,4 +13,4 @@ private:
     static std::string execute(const char* cmd);
 };
 
-#endif //INSIDE_SCAN_H
+#endif

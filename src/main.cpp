@@ -1,7 +1,7 @@
-#include "../include/SocketServer.h"
+#include "../include/socket/RestfullServer.h"
 
 int main() {
-    SocketServer socket(27908);
-    socket.connect();
+    RestfullServer server(8080);
+    server.start();
     return 0;
 }
