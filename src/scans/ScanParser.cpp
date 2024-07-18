@@ -1,4 +1,4 @@
-#include "include/scan/ScanParser.h"
+#include "../../include/scan/ScanParser.h"
 #include <regex>
 #include <vector>
 #include "utils/TrimUtils.h"
