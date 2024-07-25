@@ -1,7 +1,6 @@
 #ifndef INSIDE_SCANPARSER_H
 #define INSIDE_SCANPARSER_H
 
-#include <set>
 #include <string>
 #include <vector>
 

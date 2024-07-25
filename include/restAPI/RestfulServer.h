@@ -3,9 +3,9 @@
 
 #include "../vendor/http/httplib.h"
 
-class RestfullServer {
+class RestfulServer {
 public:
-    explicit RestfullServer(int port);
+    explicit RestfulServer(int port);
     void start() const;
 
 private:

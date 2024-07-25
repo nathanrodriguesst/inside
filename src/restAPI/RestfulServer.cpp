@@ -1,13 +1,13 @@
 #include <iostream>
-#include "../include/socket/RestfullServer.h"
+#include "../include/restAPI/RestfulServer.h"
 #include "../vendor/http/httplib.h"
 #include <nlohmann/json.hpp>
-#include "../include/socket/Routes.h"
+#include "../include/restAPI/Routes.h"
 
 using json = nlohmann::json;
-RestfullServer::RestfullServer(int port) : port(port) {}
+RestfulServer::RestfulServer(int port) : port(port) {}
 
-void RestfullServer::start() const {
+void RestfulServer::start() const {
     httplib::Server svr;
 
     // Handle OPTIONS preflight request
