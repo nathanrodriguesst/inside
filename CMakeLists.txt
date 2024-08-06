@@ -5,29 +5,36 @@ set(CMAKE_CXX_STANDARD 17)
 
 include_directories(
         ${CMAKE_SOURCE_DIR}/include
+        /usr/include/mariadb
 )
 
-set(JSON_Install OFF CACHE INTERNAL "")
+# FetchContent module to download and include nlohmann/json
+include(FetchContent)
 
-add_subdirectory(vendor/json)
+FetchContent_Declare(
+        json
+        GIT_REPOSITORY https://github.com/nlohmann/json.git
+        GIT_TAG v3.11.2  # Use the desired version
+)
+
+FetchContent_MakeAvailable(json)
 
 add_executable(inside
         src/main.cpp
         src/restAPI/RestfulServer.cpp
         src/scans/Scan.cpp
         src/exploits/Exploit.cpp
-        include/exploit/Exploit.h
         src/scans/ScanParser.cpp
-        include/scan/ScanParser.h
         src/restAPI/Routes.cpp
-        include/restAPI/Routes.h
         src/mapping/VulnerabilityMapping.cpp
-        include/mapping/VulnerabilityMapping.h
-        vendor/http/httplib.h
         src/utils/TrimUtils.cpp
-        include/utils/TrimUtils.h
         src/utils/CommandLineExecute.cpp
-        include/utils/CommandLineExecute.h
+        src/data/DBConnector.cpp
+        src/reports/ReportManager.cpp
+        include/reports/ReportManager.h
+        src/data/VulnerabilityRepository.cpp
+        include/data/VulnerabilityRepository.h
 )
 
-target_link_libraries(inside PRIVATE nlohmann_json::nlohmann_json)
+# Link against MariaDB C++ library
+target_link_libraries(inside PRIVATE nlohmann_json::nlohmann_json /usr/lib/libmariadbcpp.so)

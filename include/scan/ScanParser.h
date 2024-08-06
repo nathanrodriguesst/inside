@@ -5,7 +5,7 @@
 #include <vector>
 
 struct ScanResult {
-    std::string port;
+    int port;
     std::string protocol;
     std::string status;
     std::string service;

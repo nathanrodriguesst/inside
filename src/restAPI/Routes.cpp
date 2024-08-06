@@ -5,7 +5,6 @@
 #include "restAPI/Routes.h"
 #include "scan/Scan.h"
 #include "scan/ScanParser.h"
-#include "../vendor/http/httplib.h"
 #include "exploit/Exploit.h"
 #include "mapping/VulnerabilityMapping.h"
 
@@ -40,30 +39,6 @@ void Routes::handleNmapScan(const httplib::Request &req, httplib::Response &res)
     }
 }
 
-void Routes::handleFeroxBusterScan(const httplib::Request &req, httplib::Response &res) {
-    json data;
-    std::string errs;
-
-    try {
-        data = json::parse(req.body);
-
-        std::cout << "Initializing feroxbuster scan...\n";
-
-        std::string url = data["url"];
-        std::string args = data["args"];
-
-        std::string scanOutput = Scan::PrepareDirectoryBruteForce(url, args);
-
-        data["response"] = scanOutput;
-        setCORSHeaders(res);
-        res.set_content(data.dump(), "application/json");
-    } catch (const std::exception &e) {
-        setCORSHeaders(res);
-        res.status = 400;
-        res.set_content("Invalid JSON", "text/plain");
-    }
-}
-
 void Routes::handleInternalNetworkAnalysis(const httplib::Request &req, httplib::Response &res) {
     json data;
     std::string errs;
@@ -82,7 +57,7 @@ void Routes::handleInternalNetworkAnalysis(const httplib::Request &req, httplib:
         std::vector<ScanResult> parsedScanVector = ScanParser::parseScanResult(scanOutput);
 
         VulnerabilityMapping vm;
-        std::vector<std::string> vulnerableServices = vm.findVulnerableServices(parsedScanVector);
+        std::vector<std::string> vulnerableServices = vm.findVulnerableServices(parsedScanVector, ip);
 
         std::string exploitationResult = Exploit::exploitVulnerableServices(vulnerableServices, ip);
 
@@ -100,10 +75,6 @@ void Routes::handleInternalNetworkAnalysis(const httplib::Request &req, httplib:
 void Routes::setupRoutes(httplib::Server &svr) {
     svr.Post("/nmap-scan", [](const httplib::Request &req, httplib::Response &res) {
         handleNmapScan(req, res);
-    });
-
-    svr.Post("/feroxbuster-scan", [](const httplib::Request &req, httplib::Response &res) {
-        handleFeroxBusterScan(req, res);
     });
 
     svr.Post("/internal-net-analysis", [](const httplib::Request &req, httplib::Response &res) {

@@ -9,4 +9,4 @@ public:
     static std::string executeCommand(const char* cmd);
 };
 
-#endif //COMMANDLINEEXECUTE_H
+#endif

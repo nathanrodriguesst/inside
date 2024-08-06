@@ -10,7 +10,6 @@ public:
 
 private:
     int port;
-    void setupRoutes(httplib::Server &svr) const;
 };
 
 #endif // SOCKET_SERVER_H

@@ -12,7 +12,6 @@ public:
 
 private:
     static void handleInternalNetworkAnalysis(const httplib::Request &req, httplib::Response &res);
-    static void handleFeroxBusterScan(const httplib::Request &req,  httplib::Response &res);
     static void handleNmapScan(const httplib::Request &req,  httplib::Response &res);
 };
 

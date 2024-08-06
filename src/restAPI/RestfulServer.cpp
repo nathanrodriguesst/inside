@@ -1,8 +1,7 @@
 #include <iostream>
-#include "../include/restAPI/RestfulServer.h"
-#include "../vendor/http/httplib.h"
+#include "restAPI/RestfulServer.h"
 #include <nlohmann/json.hpp>
-#include "../include/restAPI/Routes.h"
+#include "restAPI/Routes.h"
 
 using json = nlohmann::json;
 RestfulServer::RestfulServer(int port) : port(port) {}
@@ -20,6 +19,6 @@ void RestfulServer::start() const {
 
     Routes::setupRoutes(svr);
 
-    std::cout << "Starting server on port " << port << std::endl;
+    std::cout << "Server Running on Port: " << port << std::endl;
     svr.listen("0.0.0.0", port);
 }
