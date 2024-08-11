@@ -8,11 +8,11 @@
 class DBConnector {
 public:
     explicit DBConnector();
+    static std::unique_ptr<sql::Connection> generateDatabaseConnectionInstance();
+
+private:
     static std::unique_ptr<sql::Connection>
-        generateDatabaseConnectionInstance(const std::string& host,
-                                           const std::string& user,
-                                           const std::string& password,
-                                           const std::string& database);
+    getConnection(const std::string& host,const std::string& user,const std::string& password,const std::string& database);
 };
 
 #endif

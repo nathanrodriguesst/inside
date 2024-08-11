@@ -34,6 +34,10 @@ add_executable(inside
         include/reports/ReportManager.h
         src/data/VulnerabilityRepository.cpp
         include/data/VulnerabilityRepository.h
+        src/utils/TimeUtils.cpp
+        include/utils/TimeUtils.h
+        src/data/ExploitScanRepository.cpp
+        include/data/ExploitScanRepository.h
 )
 
 # Link against MariaDB C++ library

@@ -7,6 +7,7 @@
 #include "scan/ScanParser.h"
 #include "exploit/Exploit.h"
 #include "mapping/VulnerabilityMapping.h"
+#include "reports/ReportManager.h"
 
 using json = nlohmann::json;
 
@@ -72,6 +73,39 @@ void Routes::handleInternalNetworkAnalysis(const httplib::Request &req, httplib:
     }
 }
 
+void Routes::handleHomeDetails(const httplib::Request &req, httplib::Response &res) {
+    nlohmann::json data;
+
+    try {
+        //data = nlohmann::json::parse(req.body);
+        std::cout << "Setting up home data...\n";
+
+        std::vector<VulnerableService> vulnerableServicesRegisters = ReportManager::getVulnerabilitiesRecords();
+        std::vector<ExploitScan> recentActivities = ReportManager::getRecentActivities();
+        int exploitCount = ReportManager::countExploits();
+        int scanCount = ReportManager::countScans();
+        int vulnerabilitiesCount = ReportManager::countVulnerabilities();
+
+        // Create a JSON object for the response
+        nlohmann::json response;
+        response["vulnerableServicesRegisters"] = vulnerableServicesRegisters;
+        response["recentActivities"] = recentActivities;
+        response["exploitCount"] = exploitCount;
+        response["scanCount"] = scanCount;
+        response["vulnerabilitiesCount"] = vulnerabilitiesCount;
+
+        // Assign it to the "response" field of the main JSON object
+        data["response"] = response;
+
+        setCORSHeaders(res);
+        res.set_content(data.dump(), "application/json");
+    } catch (const std::exception &e) {
+        setCORSHeaders(res);
+        res.status = 400;
+        res.set_content("Invalid JSON", "text/plain");
+    }
+}
+
 void Routes::setupRoutes(httplib::Server &svr) {
     svr.Post("/nmap-scan", [](const httplib::Request &req, httplib::Response &res) {
         handleNmapScan(req, res);
@@ -79,5 +113,9 @@ void Routes::setupRoutes(httplib::Server &svr) {
 
     svr.Post("/internal-net-analysis", [](const httplib::Request &req, httplib::Response &res) {
         handleInternalNetworkAnalysis(req, res);
+    });
+
+    svr.Get("/home-details", [](const httplib::Request &req, httplib::Response &res) {
+        handleHomeDetails(req, res);
     });
 }
