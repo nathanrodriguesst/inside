@@ -21,6 +21,26 @@ std::vector<ExploitScan> ReportManager::getRecentActivities() {
     return {};
 }
 
+std::vector<ExploitScan> ReportManager::getRecentActivitiesByTypeAndDate(const std::string &startDate, const std::string &endDate, const std::string &type) {
+    const auto conn = DBConnector::generateDatabaseConnectionInstance();
+
+    if (conn) {
+        return ExploitScanRepository::selectFromActivitiesTableByDateAndType(conn, startDate, endDate, type);
+    }
+
+    return {};
+}
+
+std::vector<VulnerableService> ReportManager::getVulnerableServicesByDate(const std::string &startDate, const std::string &endDate) {
+    const auto conn = DBConnector::generateDatabaseConnectionInstance();
+
+    if (conn) {
+        return VulnerabilityRepository::selectFromVulnerableServicesTableByDate(conn, startDate, endDate);
+    }
+
+    return {};
+}
+
 int ReportManager::countVulnerabilities() {
     const auto conn = DBConnector::generateDatabaseConnectionInstance();
 

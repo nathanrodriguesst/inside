@@ -74,10 +74,9 @@ void Routes::handleInternalNetworkAnalysis(const httplib::Request &req, httplib:
 }
 
 void Routes::handleHomeDetails(const httplib::Request &req, httplib::Response &res) {
-    nlohmann::json data;
+    json data;
 
     try {
-        //data = nlohmann::json::parse(req.body);
         std::cout << "Setting up home data...\n";
 
         std::vector<VulnerableService> vulnerableServicesRegisters = ReportManager::getVulnerabilitiesRecords();
@@ -106,6 +105,57 @@ void Routes::handleHomeDetails(const httplib::Request &req, httplib::Response &r
     }
 }
 
+void Routes::handleNetworkReport(const httplib::Request &req, httplib::Response &res) {
+    json data;
+    json response;
+
+    try {
+        std::cout << "Setting up Network Report data...\n";
+        data = json::parse(req.body);
+
+        const std::string startDate = data["startDate"];
+        const std::string endDate = data["endDate"];
+        const std::string activityType = data["activityType"];
+
+        std::vector<ExploitScan> reportResult =
+                ReportManager::getRecentActivitiesByTypeAndDate(startDate, endDate, activityType);
+
+        response = reportResult;
+
+        setCORSHeaders(res);
+        res.set_content(response.dump(), "application/json");
+    } catch (const std::exception &e) {
+        setCORSHeaders(res);
+        res.status = 400;
+        res.set_content("Invalid JSON", "text/plain");
+    }
+}
+
+void Routes::handleVulnerabilityReport(const httplib::Request &req, httplib::Response &res) {
+    json data;
+    json response;
+
+    try {
+        std::cout << "Setting up Vulnerability Report data...\n";
+        data = json::parse(req.body);
+
+        const std::string startDate = data["startDate"];
+        const std::string endDate = data["endDate"];
+
+        std::vector<VulnerableService> reportResult =
+                ReportManager::getVulnerableServicesByDate(startDate, endDate);
+
+        response = reportResult;
+
+        setCORSHeaders(res);
+        res.set_content(response.dump(), "application/json");
+    } catch (const std::exception &e) {
+        setCORSHeaders(res);
+        res.status = 400;
+        res.set_content("Invalid JSON", "text/plain");
+    }
+}
+
 void Routes::setupRoutes(httplib::Server &svr) {
     svr.Post("/nmap-scan", [](const httplib::Request &req, httplib::Response &res) {
         handleNmapScan(req, res);
@@ -117,5 +167,13 @@ void Routes::setupRoutes(httplib::Server &svr) {
 
     svr.Get("/home-details", [](const httplib::Request &req, httplib::Response &res) {
         handleHomeDetails(req, res);
+    });
+
+    svr.Post("/network-report", [](const httplib::Request &req, httplib::Response &res) {
+        handleNetworkReport(req, res);
+    });
+
+    svr.Post("/vulnerability-report", [](const httplib::Request &req, httplib::Response &res) {
+        handleVulnerabilityReport(req, res);
     });
 }

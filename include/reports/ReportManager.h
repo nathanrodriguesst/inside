@@ -10,6 +10,10 @@ class ReportManager {
 public:
     static std::vector<VulnerableService> getVulnerabilitiesRecords();
     static std::vector<ExploitScan> getRecentActivities();
+    static std::vector<ExploitScan> getRecentActivitiesByTypeAndDate
+                                (const std::string &startDate, const std::string &endDate, const std::string &type);
+    static std::vector<VulnerableService> getVulnerableServicesByDate
+                                (const std::string &startDate, const std::string &endDate);
     static int countVulnerabilities();
     static int countExploits();
     static int countScans();

@@ -13,6 +13,8 @@ private:
     static void handleInternalNetworkAnalysis(const httplib::Request &req, httplib::Response &res);
     static void handleNmapScan(const httplib::Request &req,  httplib::Response &res);
     static void handleHomeDetails(const httplib::Request &req, httplib::Response &res);
+    static void handleNetworkReport(const httplib::Request &req, httplib::Response &res);
+    static void handleVulnerabilityReport(const httplib::Request &req, httplib::Response &res);
 };
 
 

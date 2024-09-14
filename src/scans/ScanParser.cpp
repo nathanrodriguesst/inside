@@ -10,7 +10,11 @@ std::vector<ScanResult> ScanParser::parseScanResult(std::string &scanResult) {
     std::smatch match;
     std::vector<ScanResult> resultsVector;
 
-    for (auto it = std::sregex_iterator(scanResult.begin(),scanResult.end(), mappingRegex); it != std::sregex_iterator(); ++it) {
+    for (auto it = std::sregex_iterator(scanResult.begin(),
+                                        scanResult.end(),
+                                        mappingRegex);
+                                        it != std::sregex_iterator();
+                                        ++it) {
         resultsVector.emplace_back(
             ScanResult{ std::stoi(TrimUtils::trim((*it)[1].str())),
                 TrimUtils::trim((*it)[2].str()),
