@@ -21,7 +21,9 @@ std::vector<ExploitScan> ReportManager::getRecentActivities() {
     return {};
 }
 
-std::vector<ExploitScan> ReportManager::getRecentActivitiesByTypeAndDate(const std::string &startDate, const std::string &endDate, const std::string &type) {
+std::vector<ExploitScan> ReportManager::getRecentActivitiesByTypeAndDate(
+        const std::string &startDate, const std::string &endDate, const std::string &type
+) {
     const auto conn = DBConnector::generateDatabaseConnectionInstance();
 
     if (conn) {
@@ -31,11 +33,15 @@ std::vector<ExploitScan> ReportManager::getRecentActivitiesByTypeAndDate(const s
     return {};
 }
 
-std::vector<VulnerableService> ReportManager::getVulnerableServicesByDate(const std::string &startDate, const std::string &endDate) {
+std::vector<VulnerableService> ReportManager::getVulnerableServicesByDate(
+        const std::string &startDate, const std::string &endDate
+) {
     const auto conn = DBConnector::generateDatabaseConnectionInstance();
 
     if (conn) {
-        return VulnerabilityRepository::selectFromVulnerableServicesTableByDate(conn, startDate, endDate);
+        return VulnerabilityRepository::selectFromVulnerableServicesTableByDate(
+                conn, startDate, endDate
+        );
     }
 
     return {};

@@ -18,9 +18,11 @@ std::string Scan::prepareNmapScan(const std::string &ip, const std::string &args
     if (conn) {
         std::string activityType = "Scan";
         bool scanSuccess = true; //Always true since nmap will give some output on the target nonetheless.
-        ExploitScanRepository::createExploitScanRegister(conn,
-                                                         const_cast<std::string &>(ip),
-                                                         activityType, scanSuccess);
+        ExploitScanRepository::createExploitScanRegister(
+                conn,
+                const_cast<std::string &>(ip),
+                activityType, scanSuccess
+        );
     }
     return result;
 }

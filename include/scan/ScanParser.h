@@ -18,4 +18,4 @@ public:
     static std::vector<ScanResult> parseScanResult(std::string &scanResult);\
 };
 
-#endif //INSIDE_SCANPARSER_H
+#endif

