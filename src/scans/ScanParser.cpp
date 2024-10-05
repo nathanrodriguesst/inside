@@ -1,6 +1,7 @@
 #include "scan/ScanParser.h"
 #include <regex>
 #include <vector>
+#include <iostream>
 #include "utils/TrimUtils.h"
 
 ScanParser::ScanParser() = default;
@@ -10,6 +11,7 @@ std::vector<ScanResult> ScanParser::parseScanResult(std::string &scanResult) {
     std::smatch match;
     std::vector<ScanResult> resultsVector;
 
+    std::cout << "[*] Parsing services string..." << std::endl;
     for (auto it = std::sregex_iterator(scanResult.begin(),
                                         scanResult.end(),
                                         mappingRegex);
